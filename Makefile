@@ -11,7 +11,7 @@ SRCS_DIR = srcs/
 OBJS_DIR = objs
 
 SRCS_FILES = pipex.c utils.c
-BONUS_SRCS_FILES = bonus_pipex.c bonus_utils.c
+BONUS_SRCS_FILES = pipex_bonus.c utils_bonus.c utils.c
 
 OBJS = ${addprefix ${OBJS_DIR}/, ${SRCS_FILES:.c=.o}}
 BONUS_OBJS = ${addprefix ${OBJS_DIR}/, ${BONUS_SRCS_FILES:.c=.o}}
@@ -64,14 +64,15 @@ re:
 
 define HEADER
 ╔════════════════════════════════╗
-║         PIPEX COMPILED ✓       ║
+║         PIPEX  COMPILED        ║
 ╚════════════════════════════════╝
 endef
 export HEADER
 
 define BONUS_H
 ╔════════════════════════════════╗
-║        BONUS IS ACTIVE ✓       ║
+║         PIPEX  BONUS           ║
+║           COMPILED             ║
 ╚════════════════════════════════╝
 endef
 export BONUS_H

@@ -6,13 +6,13 @@
 /*   By: rsao-pay <rsao-pay@student.42lisboa.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/05/16 19:47:19 by rsao-pay          #+#    #+#             */
-/*   Updated: 2026/05/17 00:26:21 by rsao-pay         ###   ########.fr       */
+/*   Updated: 2026/05/17 01:28:10 by rsao-pay         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/pipex.h"
 
-void	child_proccess(int *fd, char **argv, char **envp)
+static void	child_proccess(int *fd, char **argv, char **envp)
 {
 	int	filein;
 
@@ -27,7 +27,7 @@ void	child_proccess(int *fd, char **argv, char **envp)
 	execute(argv[2], envp);
 }
 
-void	parent_proccess(int *fd, char **argv, char **envp)
+static void	parent_proccess(int *fd, char **argv, char **envp)
 {
 	int	fileout;
 

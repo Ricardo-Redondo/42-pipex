@@ -6,13 +6,13 @@
 /*   By: rsao-pay <rsao-pay@student.42lisboa.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/05/16 22:43:54 by rsao-pay          #+#    #+#             */
-/*   Updated: 2026/05/17 00:26:27 by rsao-pay         ###   ########.fr       */
+/*   Updated: 2026/05/17 15:15:23 by rsao-pay         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/pipex.h"
 
-void	free_arr(char **arr)
+void	free_arr(void **arr)
 {
 	int	i;
 
@@ -41,11 +41,11 @@ char	*find_path(char *cmd, char **envp)
 	{
 		path = ft_strjoin(ft_strjoin(paths[i], "/"), cmd);
 		if (access(path, X_OK) == 0)
-			return (free_arr(paths), path);
+			return (free_arr((void **)paths), path);
 		free(path);
 		i++;
 	}
-	return (free_arr(paths), NULL);
+	return (free_arr((void **)paths), NULL);
 }
 
 void	execute(char *arg, char **envp)
@@ -57,12 +57,12 @@ void	execute(char *arg, char **envp)
 	path = find_path(cmd[0], envp);
 	if (!path)
 	{
-		free_arr(cmd);
+		free_arr((void **)cmd);
 		error();
 	}
 	if (execve(path, cmd, envp) == -1)
 	{
-		free_arr(cmd);
+		free_arr((void **)cmd);
 		free(path);
 		error();
 	}
@@ -71,5 +71,15 @@ void	execute(char *arg, char **envp)
 void	error(void)
 {
 	perror("\033[1;31m[ERROR]");
+	exit(1);
+}
+
+void	usage(void)
+{
+	ft_putstr_fd("\033[1;31m[ERROR] Invalid arguments\n\e[0m", 2);
+	ft_putstr_fd("Usage:\n", 1);
+	ft_putstr_fd("./pipex <file_1> <cmd_1> ... <cmd_n> <file_2>\n", 1);
+	ft_putstr_fd("or\n", 1);
+	ft_putstr_fd("./pipex here_doc <delimiter> <cmd_1> <cmd_2> <file>\n", 1);
 	exit(1);
 }
