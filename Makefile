@@ -60,7 +60,11 @@ re:
 	$(MAKE) fclean
 	$(MAKE) all
 
-.PHONY: all bonus clean fclean re create delete
+rebonus:
+	$(MAKE) fclean
+	$(MAKE) bonus
+
+.PHONY: all bonus clean fclean re rebonus create delete
 
 define HEADER
 ╔════════════════════════════════╗
