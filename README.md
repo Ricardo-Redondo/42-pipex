@@ -43,7 +43,8 @@ pipex
 │   ├── pipex.c
 │   ├── utils.c
 │   ├── pipex_bonus.c
-│   └── utils_bonus.c
+│   ├── utils_bonus.c
+│   └── list_utils_bonus.c
 ├── LICENSE
 ├── Makefile
 ├── pipex_subject.pdf
@@ -136,15 +137,15 @@ Equivalent to:
 ```
  
 #### How It Works
- 
-- **`init_fds(argc)`** — Dynamically allocates and creates `N-1` pipes for `N` commands, stored in a NULL-terminated 2D array (`int **fds`).
-- **`multiple_pipes()`** — Forks the first command (reads from `infile`, writes to `fds[0]`).
-- **`child_proccess()`** — Loops through the middle commands, forking each one. Each middle command reads from the previous pipe (`fds[i-1][0]`) and writes to the next pipe (`fds[i][1]`).
-- **`parent_proccess()`** — Executes the last command in the parent process itself; it reads from the last pipe (`fds[argc-5][0]`) and writes to `outfile` (truncate mode).
+
+- **`init_pipes(fds, pipes)`** — Dynamically allocates and creates `N-1` pipes for `N` commands, stored in a linked list.
+- **`multiple_pipes()`** — Forks the first command (reads from `infile`, writes to `fd[0]`).
+- **`child_proccess()`** — Loops through the middle commands, forking each one. Each middle command reads from the previous pipe (`node->prev->fd[0]`) and writes to the next pipe (`node->fd[1]`).
+- **`parent_proccess()`** — Executes the last command in the parent process itself; it reads from the last pipe (`fd[0]`) and writes to `outfile` (truncate mode).
 #### Data Flow
  
 ```
-infile → cmd1 → fds[0] → cmd2 → fds[1] → cmd3 → ... → fds[n-2] → cmdn → outfile
+infile → cmd1 → node → cmd2 → node->next → cmd3 → ... → node->...->next → cmdn → outfile
 ```
  
 ---
@@ -168,16 +169,16 @@ cmd1 << LIMITER | cmd2 >> outfile
 - Reads lines from stdin using `get_next_line()`
 - Joins the limiter with `\n` to handle newline-terminated lines
 - Compares each line with the delimiter — breaks when matched
-- Writes each line to the first pipe (`fds[0][1]`)
-- Forks an inner process to execute `cmd1`, which reads from `fds[0][0]` and writes to `fds[1][1]`
+- Writes each line to the first pipe (`node->fd[1]`)
+- Forks an inner process to execute `cmd1`, which reads from `node->fd[0]` and writes to `node->next->fd[1]`
 **`hd_parent_proccess()`:**
 - Opens `outfile` in **APPEND mode** (`O_APPEND`) — heredoc appends, doesn't overwrite
-- Redirects stdin from `fds[1][0]` and stdout to `outfile`
+- Redirects stdin from `node->next->fd[0]` and stdout to `outfile`
 - Executes `cmd2`
 #### Data Flow
  
 ```
-stdin (until LIMITER) → fds[0] → cmd1 → fds[1] → cmd2 → outfile (append)
+stdin (until LIMITER) → node → cmd1 → node->next → cmd2 → outfile (append)
 ```
  
 ---

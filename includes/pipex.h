@@ -6,7 +6,7 @@
 /*   By: rsao-pay <rsao-pay@student.42lisboa.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/05/15 19:41:05 by rsao-pay          #+#    #+#             */
-/*   Updated: 2026/05/17 15:15:09 by rsao-pay         ###   ########.fr       */
+/*   Updated: 2026/05/18 22:14:24 by rsao-pay         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,7 @@
 void	error(void);
 void	usage(void);
 void	free_arr(void **arr);
-char	*find_path(char *cmd, char **envp);
 void	execute(char *arg, char **envp);
+char	*find_path(char *cmd, char **envp);
 
 #endif

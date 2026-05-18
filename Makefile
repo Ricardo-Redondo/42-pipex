@@ -11,7 +11,7 @@ SRCS_DIR = srcs/
 OBJS_DIR = objs
 
 SRCS_FILES = pipex.c utils.c
-BONUS_SRCS_FILES = pipex_bonus.c utils_bonus.c utils.c
+BONUS_SRCS_FILES = pipex_bonus.c utils_bonus.c list_utils_bonus.c utils.c
 
 OBJS = ${addprefix ${OBJS_DIR}/, ${SRCS_FILES:.c=.o}}
 BONUS_OBJS = ${addprefix ${OBJS_DIR}/, ${BONUS_SRCS_FILES:.c=.o}}

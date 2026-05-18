@@ -6,37 +6,13 @@
 /*   By: rsao-pay <rsao-pay@student.42lisboa.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/05/17 00:40:15 by rsao-pay          #+#    #+#             */
-/*   Updated: 2026/05/17 15:28:40 by rsao-pay         ###   ########.fr       */
+/*   Updated: 2026/05/18 21:19:04 by rsao-pay         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/pipex_bonus.h"
 
-int	**init_fds(int argc)
-{
-	int	**fds;
-	int	i;
-
-	fds = malloc(sizeof(int *) * (argc - 4 + 1));
-	if (!fds)
-		error();
-	i = 0;
-	while (i < argc - 4)
-	{
-		fds[i] = malloc(sizeof(int) * 2);
-		if (!fds[i] || pipe(fds[i]) == -1)
-		{
-			fds[i] = NULL;
-			free_arr((void **)fds);
-			return (NULL);
-		}
-		i++;
-	}
-	fds[i] = NULL;
-	return (fds);
-}
-
-void	hd_child_proccess(int **fds, char **argv, char **envp)
+void	hd_child_proccess(t_pipes *fds, t_node *node, char **argv, char **envp)
 {
 	char	*line;
 	char	*delimiter;
@@ -47,49 +23,42 @@ void	hd_child_proccess(int **fds, char **argv, char **envp)
 	{
 		if (ft_strncmp(line, delimiter, ft_strlen(argv[2])) == 0)
 			break ;
-		write(fds[0][1], line, ft_strlen(line));
+		write(node->fd[1], line, ft_strlen(line));
 		free(line);
 	}
-	close(fds[0][1]);
+	close(node->fd[1]);
 	pid = fork();
+	if (pid == -1)
+		free_list(fds, 1);
 	if (pid == 0)
 	{
-		dup2(fds[0][0], STDIN_FILENO);
-		dup2(fds[1][1], STDOUT_FILENO);
-		close_pipes(fds, 0);
+		dup2(node->fd[0], STDIN_FILENO);
+		dup2(node->next->fd[1], STDOUT_FILENO);
+		close_pipes(node->fd);
+		close(node->next->fd[1]);
 		execute(argv[3], envp);
 	}
 	waitpid(pid, NULL, 0);
-	exit(0);
 }
 
-void	hd_parent_proccess(int **fds, char **argv, char **envp)
+void	hd_parent_proccess(t_pipes *fds, t_node *node, char **argv, char **envp)
 {
 	int	fileout;
 
 	fileout = open(argv[5], O_WRONLY | O_CREAT | O_APPEND, 0777);
 	if (fileout == -1)
-		close_pipes(fds, 1);
-	dup2(fds[1][0], STDIN_FILENO);
+		free_list(fds, 1);
+	dup2(node->fd[0], STDIN_FILENO);
 	dup2(fileout, STDOUT_FILENO);
-	close_pipes(fds, 0);
+	close_pipes(node->fd);
 	close(fileout);
 	execute(argv[4], envp);
 }
 
-void	close_pipes(int **fds, int is_error)
+void	close_pipes(int *fd)
 {
-	int	i;
-
-	i = 0;
-	while (fds[i])
-	{
-		close(fds[i][0]);
-		close(fds[i][1]);
-		i++;
-	}
-	if (is_error)
-		error();
+	close(fd[0]);
+	close(fd[1]);
 }
 
 int	get_next_line(char **line)
