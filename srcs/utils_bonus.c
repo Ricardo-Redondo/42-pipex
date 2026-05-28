@@ -3,14 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   utils_bonus.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: rsao-pay <rsao-pay@student.42lisboa.com    +#+  +:+       +#+        */
+/*   By: rsao-pay <rsao-pay@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/05/17 00:40:15 by rsao-pay          #+#    #+#             */
-/*   Updated: 2026/05/18 21:19:04 by rsao-pay         ###   ########.fr       */
+/*   Updated: 2026/05/28 11:16:31 by rsao-pay         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../includes/pipex_bonus.h"
+#include "pipex_bonus.h"
 
 void	hd_child_proccess(t_pipes *fds, t_node *node, char **argv, char **envp)
 {

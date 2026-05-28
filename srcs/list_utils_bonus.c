@@ -3,14 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   list_utils_bonus.c                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: rsao-pay <rsao-pay@student.42lisboa.com    +#+  +:+       +#+        */
+/*   By: rsao-pay <rsao-pay@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/05/18 20:08:17 by rsao-pay          #+#    #+#             */
-/*   Updated: 2026/05/18 22:06:49 by rsao-pay         ###   ########.fr       */
+/*   Updated: 2026/05/28 11:16:21 by rsao-pay         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../includes/pipex_bonus.h"
+#include "pipex_bonus.h"
 
 void	free_list(t_pipes *fds, int is_error)
 {
